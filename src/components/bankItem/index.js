@@ -5,15 +5,15 @@ import { Container } from './styled'
 import { Text } from '../commons';
 import { numberToCurrencyReal } from '../../utils/currency';
 
-export default function BankItem({ data: { name, balance } }) {
+export default function BankItem({ data: { name, overdraft } }) {
 
     return (
         <Container>
             <Text value={name} bold />
             <Text
-                value={numberToCurrencyReal(balance)}
+                value={numberToCurrencyReal(overdraft)}
                 type="label"
-                themeColor={balance < 0 ? 'textError' : 'primary'}
+                themeColor={overdraft < 0 ? 'textError' : 'primary'}
             />
         </Container>
     );

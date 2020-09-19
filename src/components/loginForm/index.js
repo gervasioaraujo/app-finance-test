@@ -5,7 +5,7 @@ import { Form, ButtonsBox } from './styled';
 import { FeedbackMessage, Input, Button } from '../commons';
 
 
-export default function UserForm({
+export default function LoginForm({
     user,
     onEmailChange,
     onPasswordChange,
@@ -66,7 +66,7 @@ export default function UserForm({
 
 };
 
-UserForm.propTypes = {
+LoginForm.propTypes = {
     user: PropTypes.object,
     onEmailChange: PropTypes.func,
     onPasswordChange: PropTypes.func,

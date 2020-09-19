@@ -2,10 +2,6 @@ import api from '../../services/api';
 import { clearAppData } from '../../services/localDb';
 import { Alert } from 'react-native';
 
-import { intitalBankAccounts } from './fakeData/bankAccounts';
-import { intitalOperations } from './fakeData/operations';
-
-
 export const Types = {
     LIST_BANK_ACCOUNTS_STARTED: 'LIST_BANK_ACCOUNTS_STARTED',
     LIST_BANK_ACCOUNTS_SUCCED: 'LIST_BANK_ACCOUNTS_SUCCED',
@@ -24,8 +20,10 @@ export const Types = {
 const initialState = {
     isLoading: false,
     errorMessage: null,
-    bankAccounts: intitalBankAccounts,
-    operations: intitalOperations
+    // bankAccounts: intitalBankAccounts,
+    // operations: intitalOperations
+    bankAccounts: [],
+    operations: []
 };
 
 export default function bankAccountsReducer(state = initialState, action) {
@@ -36,10 +34,12 @@ export default function bankAccountsReducer(state = initialState, action) {
                 isLoading: true,
             };
         case Types.LIST_BANK_ACCOUNTS_SUCCED: {
+            const { bankAccounts } = action.payload;
             return {
                 ...state,
                 isLoading: false,
                 errorMessage: null,
+                bankAccounts
             };
         }
         case Types.LIST_BANK_ACCOUNTS_FAILS: {
@@ -56,10 +56,12 @@ export default function bankAccountsReducer(state = initialState, action) {
                 isLoading: true,
             };
         case Types.LIST_OPERATIONS_SUCCED: {
+            const { operations } = action.payload;
             return {
                 ...state,
                 isLoading: false,
                 errorMessage: null,
+                operations
             };
         }
         case Types.LIST_OPERATIONS_FAILS: {
@@ -82,15 +84,15 @@ export default function bankAccountsReducer(state = initialState, action) {
                 ...state,
                 isLoading: false,
                 errorMessage: null,
-                bankAccounts: state.bankAccounts.map(ba => {
-                    if (ba.name === bank) {
-                        if (type === 'incoming') {
-                            ba.balance = Number(ba.balance) + Number(value);
-                        } else ba.balance = Number(ba.balance) - Number(value);
-                    }
-                    return ba;
-                }),
-                operations: state.operations.concat(operation)
+                // bankAccounts: state.bankAccounts.map(ba => {
+                //     if (ba.name === bank) {
+                //         if (type === 'incoming') {
+                //             ba.balance = Number(ba.balance) + Number(value);
+                //         } else ba.balance = Number(ba.balance) - Number(value);
+                //     }
+                //     return ba;
+                // }),
+                // operations: state.operations.concat(operation)
             };
         }
         case Types.CREATE_OPERATION_FAILS: {
@@ -108,25 +110,32 @@ export default function bankAccountsReducer(state = initialState, action) {
 
 export function listBanks() {
 
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
 
         // await clearAppData();
 
         dispatch({ type: Types.LIST_BANK_ACCOUNTS_STARTED });
 
+        const { userToken } = getState().authReducer;
+
         try {
-            // const res = await api.get('/operations');
-            // console.log(res);
-            // const operations = res.data;
+            const res = await api.get('/bank-accounts',
+                {
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`
+                    }
+                });
+            // console.log(res.data);
+            const bankAccounts = res.data;
             dispatch({
                 type: Types.LIST_BANK_ACCOUNTS_SUCCED,
+                payload: { bankAccounts }
             });
         } catch (e) {
-            console.log(e);
+            // console.log(e.response.data.message);
             dispatch({
                 type: Types.LIST_BANK_ACCOUNTS_FAILS,
-                // payload: { errorMessage: e.response.data.error },
-                payload: { errorMessage: e },
+                payload: { errorMessage: e.response.data.message },
             });
         }
 
@@ -136,25 +145,30 @@ export function listBanks() {
 
 export function listOperations() {
 
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
 
         dispatch({ type: Types.LIST_OPERATIONS_STARTED });
 
+        const { userToken } = getState().authReducer;
+
         try {
-            // const res = await api.get('/operations');
-            // console.log(res);
-            // const operations = res.data;
-            // const operations = intitalOperations;
+            const res = await api.get('/operations',
+                {
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`
+                    }
+                });
+            // console.log(res.data);
+            const operations = res.data;
             dispatch({
                 type: Types.LIST_OPERATIONS_SUCCED,
-                // payload: { operations }
+                payload: { operations }
             });
         } catch (e) {
-            console.log(e);
+            // console.log(e.response.data.message);
             dispatch({
                 type: Types.LIST_OPERATIONS_FAILS,
-                // payload: { errorMessage: e.response.data.error },
-                payload: { errorMessage: e },
+                payload: { errorMessage: e.response.data.message },
             });
         }
 
@@ -164,19 +178,27 @@ export function listOperations() {
 
 export function createOperation(operation, showFeedBack = true) {
 
-    return async (dispatch) => {
+    return async (dispatch, getState) => {
 
         dispatch({ type: Types.CREATE_OPERATION_STARTED });
 
+        const { userToken } = getState().authReducer;
+
         try {
-            // const res = await api.post('/operations', operation);
+            const res = await api.post('/operations', operation,
+                {
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`
+                    }
+                });
+            // console.log(res);
             dispatch({
                 type: Types.CREATE_OPERATION_SUCCED,
                 payload: { operation }
             });
             if (showFeedBack) Alert.alert('', 'Operação criada com sucesso!');
         } catch (e) {
-            console.log(e);
+            console.log(e.response.data);
             dispatch({
                 type: Types.CREATE_OPERATION_FAILS,
                 // payload: { errorMessage: e.response.data.error },
@@ -193,6 +215,8 @@ export function createTransfer(transfer) {
     return async (dispatch) => {
 
         dispatch({ type: Types.CREATE_TRANSFER_STARTED });
+
+        console.log(transfer);
 
         try {
             const { sourceBank, destinationBank, value, date } = transfer;

@@ -60,12 +60,12 @@ export default function TransfersScreen() {
 
         cleanValidationErrorMsg();
 
-        if (!sourceBank || !sourceBank.trim()) {
+        if (!sourceBank) {
             setValidationErrorMsg('Escolha uma conta de origem!');
             return;
         }
 
-        if (!destinationBank || !destinationBank.trim()) {
+        if (!destinationBank) {
             setValidationErrorMsg('Escolha uma conta de destino!');
             return;
         }
@@ -100,7 +100,7 @@ export default function TransfersScreen() {
                         onChangeSourceBank(itemValue)
                     }>
                     <Picker.Item label='Conta de origem:' value='' />
-                    {bankAccounts.map((b, index) => <Picker.Item key={index} label={b.name} value={b.name} />)}
+                    {bankAccounts.map((b, index) => <Picker.Item key={index} label={b.name} value={b.id} />)}
                 </Picker>
                 <Picker
                     selectedValue={destinationBank}
@@ -108,7 +108,7 @@ export default function TransfersScreen() {
                         onChangeDestinationBank(itemValue)
                     }>
                     <Picker.Item label='Conta destino:' value='' />
-                    {bankAccounts.map((b, index) => <Picker.Item key={index} label={b.name} value={b.name} />)}
+                    {bankAccounts.map((b, index) => <Picker.Item key={index} label={b.name} value={b.id} />)}
                 </Picker>
                 <Input
                     placeholder='Valor'

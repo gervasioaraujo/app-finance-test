@@ -1,4 +1,5 @@
 import api from '../../services/api';
+import { Alert } from 'react-native';
 
 export const Types = {
     REGISTER_USER_STARTED: 'REGISTER_USER_STARTED',
@@ -26,12 +27,13 @@ export default function authReducer(state = initialState, action) {
                 errorMessage: null
             };
         case Types.REGISTER_USER_SUCCED: {
-            // const { user } = action.payload;
+            // const { user, userToken } = action.payload;
             return {
                 ...state,
                 isLoading: false,
                 errorMessage: null,
-                // user
+                // user,
+                // userToken
             };
         }
         case Types.REGISTER_USER_FAILS: {
@@ -80,29 +82,30 @@ export default function authReducer(state = initialState, action) {
     }
 }
 
-export function register(user) {
+export function register(userData, history) {
 
     return async (dispatch) => {
 
         dispatch({ type: Types.REGISTER_USER_STARTED });
 
-        console.log(user);
-
         try {
-            const res = await api.post('/auth/local/register', JSON.stringify(user));
-            // const res = await api.post('/auth/local/register', user);
-            console.log(res);
-            // const operations = res.data;
-            // dispatch({
-            //     type: Types.REGISTER_USER_SUCCED,
-            //     payload: { operations }
-            // });
+            const res = await api.post('/auth/local/register', userData);
+            console.log(res.data);
+            // const { jwt, user } = res.data;
+            dispatch({
+                type: Types.REGISTER_USER_SUCCED,
+                // payload: { user, userToken: jwt }
+            });
+            Alert.alert('', 'Usuário cadastrado! Faça o login no app!');
+            history.push('/');
         } catch (e) {
-            console.log(e);
-            // dispatch({
-            //     type: Types.REGISTER_USER_FAILS,
-            //     payload: { errorMessage: e.response.data.error },
-            // });
+            const [{ messages } = parentErrorObj] = e.response.data.message;
+            const [{ message } = childErrorObj] = messages;
+            console.log(message);
+            dispatch({
+                type: Types.REGISTER_USER_FAILS,
+                payload: { errorMessage: message },
+            });
         }
 
     }
@@ -119,7 +122,6 @@ export function login(userData) {
             const res = await api.post('/auth/local', userData);
             console.log(res.data);
             const { jwt, user } = res.data;
-            // await setToken(jwt);
             dispatch({
                 type: Types.LOGIN_SUCCED,
                 payload: { user, userToken: jwt }

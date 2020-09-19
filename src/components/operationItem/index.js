@@ -6,7 +6,7 @@ import { Text } from '../commons';
 import { numberToCurrencyReal } from '../../utils/currency';
 import { formatDateToString } from '../../utils/date';
 
-export default function OperationItem({ data: { description, type, value, bank, date } }) {
+export default function OperationItem({ data: { description, type, value, bank, created_at } }) {
 
     return (
         <Container>
@@ -19,7 +19,7 @@ export default function OperationItem({ data: { description, type, value, bank, 
                 />
             </MainBox>
             <DetailsBox>
-                <Text value={`${bank} (${formatDateToString(date)})`} type="label" themeColor="grayDarker" />
+                <Text value={`${bank ? `${bank.name} ` : ''}(${formatDateToString(created_at)})`} type="label" themeColor="grayDarker" />
             </DetailsBox>
         </Container>
     );

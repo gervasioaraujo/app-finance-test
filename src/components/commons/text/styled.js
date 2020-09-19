@@ -16,4 +16,9 @@ export const StyledText = styled.Text`
     css`
       color: ${g => g.theme.color[themeColor]};
     `}
+  ${({ textDecorationLine }) =>
+    textDecorationLine &&
+    css`
+      text-decoration-line: ${textDecorationLine};
+    `}
 `

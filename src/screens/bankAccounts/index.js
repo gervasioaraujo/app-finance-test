@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Container, BanksList, BalanceTotalBox } from './styled';
-import { Text, Line } from '../../components/commons';
+import { Text, Line, FeedbackMessage } from '../../components/commons';
 import { BankAccountItem } from '../../components/';
 
 import { listBanks } from '../../store/ducks/bankAccounts';
@@ -27,8 +27,8 @@ export default function BankAccountsScreen() {
 
     function renderBalanceTotal() {
         const balanceTotal = bankAccounts.reduce((total, bank) => {
-            const { balance } = bank;
-            return total + balance;
+            const { overdraft } = bank;
+            return total + overdraft;
         }, 0);
         return <Text
             value={numberToCurrencyReal(balanceTotal)}
@@ -40,15 +40,23 @@ export default function BankAccountsScreen() {
 
     return (
         <Container>
-            <Text value="Contas:" type="label" themeColor="grayDark" />
-            <Line vertical={5} />
-            <BanksList>
-                {renderBankAccounts()}
-            </BanksList>
-            <BalanceTotalBox>
-                <Text value="Saldo total: " type="label" />
-                {renderBalanceTotal()}
-            </BalanceTotalBox>
+            {bankAccounts.length === 0 &&
+                <FeedbackMessage text="Você ainda não possui nenhum banco cadastrado." />
+            }
+            {bankAccounts.length > 0 &&
+                <>
+                    <Text value="Contas:" type="label" themeColor="grayDark" />
+                    <Line vertical={5} />
+                    <BanksList>
+                        {renderBankAccounts()}
+                    </BanksList>
+                    <BalanceTotalBox>
+                        <Text value="Saldo disponível: " type="label" themeColor="grayDark" />
+                        {renderBalanceTotal()}
+                    </BalanceTotalBox>
+                </>
+            }
+            <Text value="Adicionar banco" />
         </Container>
     );
 

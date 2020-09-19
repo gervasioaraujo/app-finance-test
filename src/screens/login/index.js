@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { Container } from './styled';
 import { Text } from '../../components/commons';
-import { UserForm } from '../../components';
+import { LoginForm } from '../../components';
 import { login } from '../../store/ducks/auth';
 
 export default function LoginScreen({ history }) {
@@ -27,7 +27,7 @@ export default function LoginScreen({ history }) {
 
     return (
         <Container>
-            <UserForm
+            <LoginForm
                 user={user}
                 onEmailChange={onIdentifierChange}
                 onPasswordChange={onPasswordChange}
@@ -37,8 +37,13 @@ export default function LoginScreen({ history }) {
                 errorMessage={errorMessage}
             />
             <Text
-                value="Não possui uma conta ainda? Cadastre-se!"
+                value="Não possui uma conta ainda?"
+            />
+            <Text
+                value="Cadastre-se!"
                 onPress={() => history.push("registration")}
+                textDecorationLine='underline'
+                themeColor="primary"
             />
         </Container>
     );

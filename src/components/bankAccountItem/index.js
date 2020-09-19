@@ -5,14 +5,14 @@ import { Container } from './styled'
 import { Text } from '../commons';
 import { numberToCurrencyReal } from '../../utils/currency';
 
-export default function BankAccountItem({ data: { name, balance } }) {
+export default function BankAccountItem({ data: { name, overdraft } }) {
 
     return (
         <Container>
             <Text value={name} />
             <Text
-                value={numberToCurrencyReal(balance)}
-                themeColor={balance < 0 ? 'textError' : 'primary'}
+                value={numberToCurrencyReal(overdraft)}
+                themeColor={overdraft < 0 ? 'textError' : 'primary'}
             />
         </Container>
     );

@@ -31,6 +31,7 @@ export default function OperationsScreen() {
     }
 
     function onChangeBank(bank) {
+        console.log(bank);
         setOperation({ ...operation, bank });
     }
 
@@ -64,7 +65,7 @@ export default function OperationsScreen() {
 
         cleanValidationErrorMsg();
 
-        if (!bank || !bank.trim()) {
+        if (!bank) {
             setValidationErrorMsg('Escolha uma conta bancária!');
             return;
         }
@@ -103,7 +104,7 @@ export default function OperationsScreen() {
                         onChangeBank(itemValue)
                     }>
                     <Picker.Item label='Conta bancária:' value='' />
-                    {bankAccounts.map((b, index) => <Picker.Item key={index} label={b.name} value={b.name} />)}
+                    {bankAccounts.map((b, index) => <Picker.Item key={index} label={b.name} value={b.id} />)}
                 </Picker>
                 <Picker
                     selectedValue={type}

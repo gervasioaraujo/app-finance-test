@@ -25,4 +25,5 @@ Text.propTypes = {
   type: PropTypes.string,
   bold: PropTypes.bool,
   themeColor: PropTypes.string,
+  textDecorationLine: PropTypes.string,
 }
