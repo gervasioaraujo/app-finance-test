@@ -10,6 +10,11 @@ export const BanksBox = styled.View`
   margin-top: 10px;
 `
 
+export const TopBanksBox = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`
+
 export const BanksList = styled.ScrollView`
   background-color: ${({ theme }) => theme.color.white};
   padding-vertical: 10px;

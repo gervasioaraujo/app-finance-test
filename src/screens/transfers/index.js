@@ -115,6 +115,7 @@ export default function TransfersScreen() {
                     onChangeText={(text) => onChangeValue(text)}
                     keyboardType="numeric"
                     value={value}
+                    maskType='money'
                 />
                 <DatePickerButton onPress={openDatePicker}>
                     <Text value={formatDateToString(date)} />

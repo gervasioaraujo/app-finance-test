@@ -125,6 +125,7 @@ export default function OperationsScreen() {
                     onChangeText={(text) => onChangeValue(text)}
                     keyboardType="numeric"
                     value={value}
+                    maskType='money'
                 />
                 <DatePickerButton onPress={openDatePicker}>
                     <Text value={formatDateToString(date)} />

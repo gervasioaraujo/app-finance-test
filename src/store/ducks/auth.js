@@ -9,13 +9,15 @@ export const Types = {
     LOGIN_SUCCED: 'LOGIN_SUCCED',
     LOGIN_FAILS: 'LOGIN_FAILS',
     LOGOUT: 'LOGOUT',
+    LOCAL_LOGIN_SUCCED: 'LOCAL_LOGIN_SUCCED'
 };
 
 const initialState = {
     isLoading: false,
     errorMessage: null,
     user: null,
-    userToken: null
+    userToken: null,
+    isUserLoggedIn: false
 };
 
 export default function authReducer(state = initialState, action) {
@@ -57,7 +59,8 @@ export default function authReducer(state = initialState, action) {
                 isLoading: false,
                 errorMessage: null,
                 user,
-                userToken
+                userToken,
+                isUserLoggedIn: true
             };
         }
         case Types.LOGIN_FAILS: {
@@ -73,8 +76,15 @@ export default function authReducer(state = initialState, action) {
                 ...state,
                 isLoading: false,
                 errorMessage: null,
-                user: null,
-                userToken: null
+                isUserLoggedIn: false
+            };
+        }
+        case Types.LOCAL_LOGIN_SUCCED: {
+            return {
+                ...state,
+                isLoading: false,
+                errorMessage: null,
+                isUserLoggedIn: true
             };
         }
         default:
@@ -143,5 +153,12 @@ export function login(userData) {
 export function logout() {
     return (dispatch) => {
         dispatch({ type: Types.LOGOUT });
+    };
+}
+
+export function localLogin(history) {
+    return (dispatch) => {
+        dispatch({ type: Types.LOCAL_LOGIN_SUCCED });
+        dispatch(history.push('/'));
     };
 }

@@ -7,7 +7,7 @@ export const LinkBox = styled.View`
 `
 
 export const StyledLink = styled(Link)`
-    align-items: center;
-    width: 100%;
-    padding: 10px;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
 `;

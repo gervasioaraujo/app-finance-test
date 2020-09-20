@@ -12,9 +12,9 @@ import { CustomTab } from '../components';
 
 export default function AppNavigation() {
 
-    const { userToken } = useSelector(state => state.authReducer);
+    const { isUserLoggedIn } = useSelector(state => state.authReducer);
 
-    if (userToken === null) {
+    if (!isUserLoggedIn) {
         return (
             <NativeRouter>
                 <Route exact path="/" component={LoginScreen} />

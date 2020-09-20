@@ -21,4 +21,9 @@ export const StyledText = styled.Text`
     css`
       text-decoration-line: ${textDecorationLine};
     `}
+  ${({ alignSelf }) =>
+    alignSelf &&
+    css`
+      align-self: ${alignSelf};
+    `}
 `

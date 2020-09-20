@@ -1,8 +1,9 @@
 import React, { useState } from "react";
+import { Platform } from 'react-native';
 import PropTypes from 'prop-types';
 
-import { Form, ButtonsBox } from './styled';
-import { FeedbackMessage, Input, Button } from '../commons';
+import { Form } from './styled';
+import { FeedbackMessage, Input, Button, Text } from '../commons';
 
 
 export default function LoginForm({
@@ -12,7 +13,8 @@ export default function LoginForm({
     onPressConfirm,
     errorMessage,
     actionText,
-    isLoading
+    isLoading,
+    localLogin
 }) {
 
     const [validationErrorMsg, setValidationErrorMsg] = useState(null);
@@ -58,9 +60,16 @@ export default function LoginForm({
                 onChangeText={(text) => onPasswordChange(text)}
                 value={password}
             />
-            <ButtonsBox>
-                <Button text={actionText} onPress={validateForm} loading={isLoading} />
-            </ButtonsBox>
+            <Button text={actionText} onPress={validateForm} loading={isLoading} />
+            {localLogin &&
+                <Text
+                    value={ Platform.OS === 'android' ? "Login com digital" : "Login com face id"}
+                    onPress={localLogin}
+                    textDecorationLine='underline'
+                    themeColor="primary"
+                    alignSelf="center"
+                />
+            }
         </Form>
     );
 
@@ -74,4 +83,5 @@ LoginForm.propTypes = {
     errorMessage: PropTypes.string,
     actionText: PropTypes.string,
     isLoading: PropTypes.bool,
+    localLogin: PropTypes.func
 };

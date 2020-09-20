@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Container, OperationsList, BanksList, BanksBox, OperationsBox } from './styled';
+import { Container, OperationsList, BanksList, BanksBox, TopBanksBox, OperationsBox } from './styled';
 import { Text, Line, FeedbackMessage } from '../../components/commons';
 import { BankItem, OperationItem } from '../../components/';
 import { listBanks, listOperations } from '../../store/ducks/bankAccounts';
@@ -33,7 +33,16 @@ export default function MainScreen() {
             showsVerticalScrollIndicator={false}
         >
             <BanksBox>
-                <Text value="Minhas Contas:" type="label" themeColor="grayDark" />
+                <TopBanksBox>
+                    <Text value="Minhas Contas:" type="label" themeColor="grayDark" />
+                    <Text
+                        value='Nova conta'
+                        onPress={() => {}}
+                        // textDecorationLine='underline'
+                        themeColor="primary"
+                        alignSelf="center"
+                    />
+                </TopBanksBox>
                 <Line vertical={5} />
                 {bankAccounts.length === 0 &&
                     <>
