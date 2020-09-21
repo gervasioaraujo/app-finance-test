@@ -6,6 +6,9 @@ export const Types = {
     LIST_BANK_ACCOUNTS_STARTED: 'LIST_BANK_ACCOUNTS_STARTED',
     LIST_BANK_ACCOUNTS_SUCCED: 'LIST_BANK_ACCOUNTS_SUCCED',
     LIST_BANK_ACCOUNTS_FAILS: 'LIST_BANK_ACCOUNTS_FAILS',
+    CREATE_BANK_ACCOUNT_STARTED: 'CREATE_BANK_ACCOUNT_STARTED',
+    CREATE_BANK_ACCOUNT_SUCCED: 'CREATE_BANK_ACCOUNT_SUCCED',
+    CREATE_BANK_ACCOUNT_FAILS: 'CREATE_BANK_ACCOUNT_FAILS',
     LIST_OPERATIONS_STARTED: 'LIST_OPERATIONS_STARTED',
     LIST_OPERATIONS_SUCCED: 'LIST_OPERATIONS_SUCCED',
     LIST_OPERATIONS_FAILS: 'LIST_OPERATIONS',
@@ -43,6 +46,26 @@ export default function bankAccountsReducer(state = initialState, action) {
             };
         }
         case Types.LIST_BANK_ACCOUNTS_FAILS: {
+            const { errorMessage } = action.payload;
+            return {
+                ...state,
+                isLoading: false,
+                errorMessage
+            };
+        }
+        case Types.CREATE_BANK_ACCOUNT_STARTED:
+            return {
+                ...state,
+                isLoading: true,
+            };
+        case Types.CREATE_BANK_ACCOUNT_SUCCED: {
+            return {
+                ...state,
+                isLoading: false,
+                errorMessage: null
+            };
+        }
+        case Types.CREATE_BANK_ACCOUNT_FAILS: {
             const { errorMessage } = action.payload;
             return {
                 ...state,
@@ -132,10 +155,43 @@ export function listBanks() {
                 payload: { bankAccounts }
             });
         } catch (e) {
-            // console.log(e.response.data.message);
+            const errorMessage = e ?.response ? e.response.data.message : 'Error';
             dispatch({
                 type: Types.LIST_BANK_ACCOUNTS_FAILS,
-                payload: { errorMessage: e.response.data.message },
+                payload: { errorMessage },
+            });
+        }
+
+    }
+
+}
+
+export function createBank(bankAccount) {
+
+    return async (dispatch, getState) => {
+
+        dispatch({ type: Types.CREATE_BANK_ACCOUNT_STARTED });
+
+        const { userToken } = getState().authReducer;
+
+        try {
+            const res = await api.post('/bank-accounts',
+                {
+                    headers: {
+                        'Authorization': `Bearer ${userToken}`
+                    }
+                });
+            // console.log(res.data);
+            // const bankAccounts = res.data;
+            dispatch({
+                type: Types.CREATE_BANK_ACCOUNT_SUCCED,
+                // payload: { bankAccounts }
+            });
+        } catch (e) {
+            const errorMessage = e ?.response ? e.response.data.message : 'Error';
+            dispatch({
+                type: Types.CREATE_BANK_ACCOUNT_FAILS,
+                payload: { errorMessage },
             });
         }
 
@@ -165,10 +221,10 @@ export function listOperations() {
                 payload: { operations }
             });
         } catch (e) {
-            // console.log(e.response.data.message);
+            const errorMessage = e ?.response ? e.response.data.message : 'Error';
             dispatch({
                 type: Types.LIST_OPERATIONS_FAILS,
-                payload: { errorMessage: e.response.data.message },
+                payload: { errorMessage },
             });
         }
 
@@ -198,11 +254,10 @@ export function createOperation(operation, showFeedBack = true) {
             });
             if (showFeedBack) Alert.alert('', 'Operação criada com sucesso!');
         } catch (e) {
-            console.log(e.response.data);
+            const errorMessage = e ?.response ? e.response.data.message : 'Error';
             dispatch({
                 type: Types.CREATE_OPERATION_FAILS,
-                // payload: { errorMessage: e.response.data.error },
-                payload: { errorMessage: e },
+                payload: { errorMessage },
             });
         }
 
@@ -230,11 +285,10 @@ export function createTransfer(transfer) {
             });
             Alert.alert('', 'Transferência criada com sucesso!');
         } catch (e) {
-            console.log(e);
+            const errorMessage = e ?.response ? e.response.data.message : 'Error';
             dispatch({
                 type: Types.CREATE_TRANSFER_FAILS,
-                // payload: { errorMessage: e.response.data.error },
-                payload: { errorMessage: e },
+                payload: { errorMessage },
             });
         }
 

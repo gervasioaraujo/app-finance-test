@@ -6,7 +6,7 @@ import { Text, Line, FeedbackMessage } from '../../components/commons';
 import { BankItem, OperationItem } from '../../components/';
 import { listBanks, listOperations } from '../../store/ducks/bankAccounts';
 
-export default function MainScreen() {
+export default function MainScreen({ history }) {
 
     const { bankAccounts, operations } = useSelector(state => state.bankAccountsReducer);
     const dispatch = useDispatch();
@@ -37,10 +37,10 @@ export default function MainScreen() {
                     <Text value="Minhas Contas:" type="label" themeColor="grayDark" />
                     <Text
                         value='Nova conta'
-                        onPress={() => {}}
-                        // textDecorationLine='underline'
+                        onPress={() => history.push('/newAccountBank')}
                         themeColor="primary"
                         alignSelf="center"
+                        bold
                     />
                 </TopBanksBox>
                 <Line vertical={5} />
