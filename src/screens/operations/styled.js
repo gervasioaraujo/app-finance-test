@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Container = styled.ScrollView.attrs(() => ({
   contentContainerStyle: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center'
   },
 }))`

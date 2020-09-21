@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Picker } from '@react-native-community/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Container, Form, DatePickerButton } from './styled';
-import { Text, Input, Button, FeedbackMessage } from '../../components/commons';
+import { Text, Input, Button, Picker, FeedbackMessage } from '../../components/commons';
 import { listBanks, createTransfer } from '../../store/ducks/bankAccounts';
 import { formatDateToString } from '../../utils/date';
+import theme from '../../../theme';
 
 export default function TransfersScreen() {
 
@@ -95,21 +95,33 @@ export default function TransfersScreen() {
             }
             <Form>
                 <Picker
+                    placeholder={{ label: 'Conta de origem:', value: null, color: theme.color.grayDark }}
+                    onValueChange={(value) => onChangeSourceBank(value)}
+                    items={bankAccounts.map(b => { return { label: b.name, value: b.id } })}
+                />
+                {/* <Picker
                     selectedValue={sourceBank}
                     onValueChange={(itemValue) =>
                         onChangeSourceBank(itemValue)
                     }>
                     <Picker.Item label='Conta de origem:' value='' />
                     {bankAccounts.map((b, index) => <Picker.Item key={index} label={b.name} value={b.id} />)}
-                </Picker>
+                </Picker> */}
                 <Picker
+                    placeholder={{ label: 'Conta destino:', value: null, color: theme.color.grayDark }}
+                    onValueChange={(value) => onChangeDestinationBank(value)}
+                    items={bankAccounts.map(b => {
+                        return { label: b.name, value: b.id };
+                    })}
+                />
+                {/* <Picker
                     selectedValue={destinationBank}
                     onValueChange={(itemValue) =>
                         onChangeDestinationBank(itemValue)
                     }>
                     <Picker.Item label='Conta destino:' value='' />
                     {bankAccounts.map((b, index) => <Picker.Item key={index} label={b.name} value={b.id} />)}
-                </Picker>
+                </Picker> */}
                 <Input
                     placeholder='Valor'
                     onChangeText={(text) => onChangeValue(text)}

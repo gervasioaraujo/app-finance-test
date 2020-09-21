@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Picker } from '@react-native-community/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Container, Form, DatePickerButton } from './styled';
-import { Text, Input, Button, FeedbackMessage } from '../../components/commons';
+import { Text, Input, Button, Picker, FeedbackMessage } from '../../components/commons';
 import { listBanks, createOperation } from '../../store/ducks/bankAccounts';
 import { formatDateToString } from '../../utils/date';
+import theme from '../../../theme';
 
 export default function OperationsScreen() {
 
@@ -99,22 +99,18 @@ export default function OperationsScreen() {
             }
             <Form>
                 <Picker
-                    selectedValue={bank}
-                    onValueChange={(itemValue) =>
-                        onChangeBank(itemValue)
-                    }>
-                    <Picker.Item label='Conta bancária:' value='' />
-                    {bankAccounts.map((b, index) => <Picker.Item key={index} label={b.name} value={b.id} />)}
-                </Picker>
+                    placeholder={{ label: 'Escolha um banco:', value: null, color: theme.color.grayDark }}
+                    onValueChange={(value) => onChangeBank(value)}
+                    items={bankAccounts.map(b => { return { label: b.name, value: b.id } })}
+                />
                 <Picker
-                    selectedValue={type}
-                    onValueChange={(itemValue) =>
-                        onChangeOperationType(itemValue)
-                    }>
-                    <Picker.Item label='Tipo de operação:' value='' />
-                    <Picker.Item label="Entrada" value="incoming" />
-                    <Picker.Item label="Saída" value="outcoming" />
-                </Picker>
+                    placeholder={{ label: 'Escolha o tipo de operação:', color: theme.color.grayDark }}
+                    onValueChange={(value) => onChangeOperationType(value)}
+                    items={[
+                        { label: 'Entrada', value: 'incoming' },
+                        { label: 'Saída', value: 'outcoming' },
+                    ]}
+                />
                 <Input
                     placeholder='Descrição'
                     onChangeText={(text) => onChangeDescription(text)}
