@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Container, Form, DatePickerButton } from './styled';
-import { Text, Input, Button, Picker, FeedbackMessage } from '../../components/commons';
+import { Container, Form, DatePickerButton, StyledScroll } from './styled';
+import { Text, Input, Button, Picker, FeedbackMessage, Line, ModalSpinner } from '../../components/commons';
 import { listBanks, createOperation } from '../../store/ducks/bankAccounts';
 import { formatDateToString } from '../../utils/date';
 import theme from '../../../theme';
@@ -13,7 +13,7 @@ export default function OperationsScreen() {
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [operation, setOperation] = useState({ date: new Date() });
     const [validationErrorMsg, setValidationErrorMsg] = useState(null);
-    const { bankAccounts } = useSelector(state => state.bankAccountsReducer);
+    const { bankAccounts, isLoading } = useSelector(state => state.bankAccountsReducer);
     const dispatch = useDispatch();
 
     const { bank, type, description, value, date } = operation;
@@ -89,59 +89,61 @@ export default function OperationsScreen() {
     }
 
     return (
-        <Container
-            showsVerticalScrollIndicator={false}
-        >
-            <Text value="Nova operação:" type="label" themeColor="grayDark" />
-            {
-                validationErrorMsg &&
-                <FeedbackMessage text={validationErrorMsg} type="error" />
-            }
-            <Form>
-                <Picker
-                    placeholder={{ label: 'Escolha um banco:', value: null, color: theme.color.grayDark }}
-                    onValueChange={(value) => onChangeBank(value)}
-                    items={bankAccounts.map(b => { return { label: b.name, value: b.id } })}
-                />
-                <Picker
-                    placeholder={{ label: 'Escolha o tipo de operação:', color: theme.color.grayDark }}
-                    onValueChange={(value) => onChangeOperationType(value)}
-                    items={[
-                        { label: 'Entrada', value: 'incoming' },
-                        { label: 'Saída', value: 'outcoming' },
-                    ]}
-                />
-                <Input
-                    placeholder='Descrição'
-                    onChangeText={(text) => onChangeDescription(text)}
-                    value={description}
-                />
-                <Input
-                    placeholder='Valor'
-                    onChangeText={(text) => onChangeValue(text)}
-                    keyboardType="numeric"
-                    value={value}
-                    maskType='money'
-                />
-                <DatePickerButton onPress={openDatePicker}>
-                    <Text value={formatDateToString(date)} />
-                </DatePickerButton>
+        <Container>
+            <ModalSpinner visible={isLoading} />
+            <StyledScroll showsVerticalScrollIndicator={false}>
+                <Text value="Nova operação:" type="label" themeColor="grayDark" />
+                <Line vertical={5} />
                 {
-                    showDatePicker &&
-                    <DateTimePicker
-                        // testID="dateTimePicker"
-                        value={date}
-                        mode="date"
-                        is24Hour={true}
-                        display="default"
-                        onChange={onChangeDate}
-                    />
+                    validationErrorMsg &&
+                    <FeedbackMessage text={validationErrorMsg} type="error" />
                 }
-                <Button
-                    text="Confirmar"
-                    onPress={validateForm}
-                />
-            </Form>
+                <Form>
+                    <Picker
+                        placeholder={{ label: 'Escolha um banco:', value: null, color: theme.color.grayDark }}
+                        onValueChange={(value) => onChangeBank(value)}
+                        items={bankAccounts.map(b => { return { label: b.name, value: b.id } })}
+                    />
+                    <Picker
+                        placeholder={{ label: 'Escolha o tipo de operação:', color: theme.color.grayDark }}
+                        onValueChange={(value) => onChangeOperationType(value)}
+                        items={[
+                            { label: 'Entrada', value: 'incoming' },
+                            { label: 'Saída', value: 'outcoming' },
+                        ]}
+                    />
+                    <Input
+                        placeholder='Descrição'
+                        onChangeText={(text) => onChangeDescription(text)}
+                        value={description}
+                    />
+                    <Input
+                        placeholder='Valor'
+                        onChangeText={(text) => onChangeValue(text)}
+                        keyboardType="numeric"
+                        value={value}
+                        maskType='money'
+                    />
+                    <DatePickerButton onPress={openDatePicker}>
+                        <Text value={formatDateToString(date)} />
+                    </DatePickerButton>
+                    {
+                        showDatePicker &&
+                        <DateTimePicker
+                            // testID="dateTimePicker"
+                            value={date}
+                            mode="date"
+                            is24Hour={true}
+                            display="default"
+                            onChange={onChangeDate}
+                        />
+                    }
+                    <Button
+                        text="Confirmar"
+                        onPress={validateForm}
+                    />
+                </Form>
+            </StyledScroll>
         </Container>
     );
 

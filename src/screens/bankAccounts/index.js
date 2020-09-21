@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Container, BanksList, BalanceTotalBox } from './styled';
-import { Text, Line, FeedbackMessage } from '../../components/commons';
+import { Container, BanksList, BalanceTotalBox, TopBanksBox, StyledScroll } from './styled';
+import { Text, Line, FeedbackMessage, ModalSpinner } from '../../components/commons';
 import { BankAccountItem } from '../../components/';
 
 import { listBanks } from '../../store/ducks/bankAccounts';
 import { numberToCurrencyReal } from '../../utils/currency';
 
-export default function BankAccountsScreen() {
+export default function BankAccountsScreen({ history }) {
 
-    const { bankAccounts } = useSelector(state => state.bankAccountsReducer);
+    const { bankAccounts, isLoading } = useSelector(state => state.bankAccountsReducer);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -40,23 +40,34 @@ export default function BankAccountsScreen() {
 
     return (
         <Container>
-            {bankAccounts.length === 0 &&
-                <FeedbackMessage text="Você ainda não possui nenhum banco cadastrado." />
-            }
-            {bankAccounts.length > 0 &&
-                <>
-                    <Text value="Contas:" type="label" themeColor="grayDark" />
-                    <Line vertical={5} />
-                    <BanksList>
-                        {renderBankAccounts()}
-                    </BanksList>
-                    <BalanceTotalBox>
-                        <Text value="Saldo disponível: " type="label" themeColor="grayDark" />
-                        {renderBalanceTotal()}
-                    </BalanceTotalBox>
-                </>
-            }
-            <Text value="Adicionar banco" />
+            <ModalSpinner visible={isLoading} />
+            <StyledScroll showsVerticalScrollIndicator={false}>
+                {bankAccounts.length === 0 &&
+                    <FeedbackMessage text="Você ainda não possui nenhum banco cadastrado." />
+                }
+                {bankAccounts.length > 0 &&
+                    <>
+                        <TopBanksBox>
+                            <Text value="Contas:" type="label" themeColor="grayDark" />
+                            <Text
+                                value='Nova conta'
+                                onPress={() => history.push('/newAccountBank')}
+                                themeColor="primary"
+                                alignSelf="center"
+                                bold
+                            />
+                        </TopBanksBox>
+                        <Line vertical={5} />
+                        <BanksList>
+                            {renderBankAccounts()}
+                        </BanksList>
+                        <BalanceTotalBox>
+                            <Text value="Saldo disponível: " type="label" themeColor="grayDark" />
+                            {renderBalanceTotal()}
+                        </BalanceTotalBox>
+                    </>
+                }
+            </StyledScroll>
         </Container>
     );
 

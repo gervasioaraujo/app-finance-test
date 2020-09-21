@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Container, Form, ButtonsBox } from './styled';
-import { Text, Input, Button, FeedbackMessage } from '../../components/commons';
+import { Container, Form, ButtonsBox, StyledScroll } from './styled';
+import { Text, Input, Button, FeedbackMessage, Line } from '../../components/commons';
 import { listBanks, createOperation } from '../../store/ducks/bankAccounts';
 
 export default function NewAccountBankScreen({ history }) {
 
-    const [showDatePicker, setShowDatePicker] = useState(false);
     const [bankAccount, setBankAccount] = useState({});
     const [validationErrorMsg, setValidationErrorMsg] = useState(null);
     const dispatch = useDispatch();
@@ -49,40 +48,41 @@ export default function NewAccountBankScreen({ history }) {
     }
 
     return (
-        <Container
-            showsVerticalScrollIndicator={false}
-        >
-            <Text value="Adicionar banco:" type="label" themeColor="grayDark" />
-            {
-                validationErrorMsg &&
-                <FeedbackMessage text={validationErrorMsg} type="error" />
-            }
-            <Form>
-                <Input
-                    placeholder='Nome do banco'
-                    onChangeText={(text) => onChangeBankName(text)}
-                    value={name}
-                />
-                <Input
-                    placeholder='Saldo'
-                    onChangeText={(text) => onChangeOverdraft(text)}
-                    keyboardType="numeric"
-                    value={overdraft}
-                    maskType='money'
-                />
-                <ButtonsBox>
-                    <Button
-                        text="Cancelar"
-                        onPress={() => history.push('/')}
-                        width={49}
+        <Container>
+            <StyledScroll showsVerticalScrollIndicator={false}>
+                <Text value="Adicionar banco:" type="label" themeColor="grayDark" />
+                <Line vertical={5} />
+                {
+                    validationErrorMsg &&
+                    <FeedbackMessage text={validationErrorMsg} type="error" />
+                }
+                <Form>
+                    <Input
+                        placeholder='Nome do banco'
+                        onChangeText={(text) => onChangeBankName(text)}
+                        value={name}
                     />
-                    <Button
-                        text="Salvar"
-                        onPress={validateForm}
-                        width={49}
+                    <Input
+                        placeholder='Saldo'
+                        onChangeText={(text) => onChangeOverdraft(text)}
+                        keyboardType="numeric"
+                        value={overdraft}
+                        maskType='money'
                     />
-                </ButtonsBox>
-            </Form>
+                    <ButtonsBox>
+                        <Button
+                            text="Cancelar"
+                            onPress={() => history.push('/')}
+                            width={49}
+                        />
+                        <Button
+                            text="Salvar"
+                            onPress={validateForm}
+                            width={49}
+                        />
+                    </ButtonsBox>
+                </Form>
+            </StyledScroll>
         </Container>
     );
 
