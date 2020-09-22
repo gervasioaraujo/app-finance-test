@@ -29,13 +29,14 @@ export default function authReducer(state = initialState, action) {
                 errorMessage: null
             };
         case Types.REGISTER_USER_SUCCED: {
-            // const { user, userToken } = action.payload;
+            const { user, userToken } = action.payload;
             return {
                 ...state,
                 isLoading: false,
                 errorMessage: null,
-                // user,
-                // userToken
+                user,
+                userToken,
+                isUserLoggedIn: true
             };
         }
         case Types.REGISTER_USER_FAILS: {
@@ -101,12 +102,12 @@ export function register(userData, history) {
         try {
             const res = await api.post('/auth/local/register', userData);
             console.log(res.data);
-            // const { jwt, user } = res.data;
+            const { jwt, user } = res.data;
             dispatch({
                 type: Types.REGISTER_USER_SUCCED,
-                // payload: { user, userToken: jwt }
+                payload: { user, userToken: jwt }
             });
-            Alert.alert('', 'Usuário cadastrado! Faça o login no app!');
+            Alert.alert('', 'Usuário cadastrado!');
             history.push('/');
         } catch (e) {
             const [{ messages } = parentErrorObj] = e.response.data.message;
