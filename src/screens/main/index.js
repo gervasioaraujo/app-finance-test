@@ -45,10 +45,7 @@ export default function MainScreen({ history }) {
                     </TopBanksBox>
                     <Line vertical={5} />
                     {bankAccounts.length === 0 &&
-                        <>
-                            <FeedbackMessage text="Você ainda não possui nenhum banco cadastrado." />
-                            <Text value="Adicionar banco" />
-                        </>
+                        <FeedbackMessage text="Você ainda não possui nenhuma conta bancária cadastrada." />
                     }
                     {bankAccounts.length > 0 &&
                         <BanksList

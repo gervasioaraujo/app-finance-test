@@ -6,5 +6,12 @@ export const StyledFeedbackMessage = styled.Text`
     theme.color.primary
   };
   align-self: center;
+  text-align: center;
   margin-bottom: 5px;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: ${({ type, theme }) => type === 'error' ?
+    theme.color.textErrorLight :
+    theme.color.primaryLight
+  };
 `

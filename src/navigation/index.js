@@ -1,6 +1,5 @@
 import React from "react";
 import { NativeRouter, Route, Switch } from "react-router-native";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useSelector } from 'react-redux';
 
 import {
@@ -10,21 +9,28 @@ import {
 } from '../screens';
 import { MainContainer, DashboardContainer, TabNavigator } from './styled';
 import { CustomTab } from '../components';
+import theme from '../../theme';
+
+const TABS = [
+    { path: '/', iconName: 'home', component: MainScreen },
+    { path: '/operations', iconName: 'wallet-plus', component: OperationsScreen },
+    { path: '/transfers', iconName: 'bank-transfer', component: TransfersScreen },
+    { path: '/bankAccounts', iconName: 'wallet', component: BankAccountsScreen },
+    { path: '/profile', iconName: 'account', component: ProfileScreen },
+];
 
 export default function AppNavigation() {
 
     const { isUserLoggedIn } = useSelector(state => state.authReducer);
 
-    if (!isUserLoggedIn) {
-        return (
-            <NativeRouter>
-                {/* <Switch> */}
-                <Route exact path="/" component={LoginScreen} />
-                <Route path="/registration" component={RegistrationScreen} />
-                {/* </Switch> */}
-            </NativeRouter>
-        );
-    }
+    // if (!isUserLoggedIn) {
+    //     return (
+    //         <NativeRouter>
+    //             <Route exact path="/" component={LoginScreen} />
+    //             <Route path="/registration" component={RegistrationScreen} />
+    //         </NativeRouter>
+    //     );
+    // }
 
     return (
         <NativeRouter>
@@ -37,28 +43,22 @@ export default function AppNavigation() {
 
                     <DashboardContainer>
 
-                        <Route exact path="/" component={MainScreen} />
-                        <Route path="/operations" component={OperationsScreen} />
-                        <Route path="/transfers" component={TransfersScreen} />
-                        <Route path="/bankAccounts" component={BankAccountsScreen} />
-                        <Route path="/profile" component={ProfileScreen} />
+                        {
+                            TABS.map((tab, index) =>
+                                (tab.path === "/")
+                                    ?
+                                    <Route key={index} exact path={tab.path} component={tab.component} />
+                                    :
+                                    <Route key={index} path={tab.path} component={tab.component} />
+                            )
+                        }
 
                         <TabNavigator>
-                            <CustomTab to="/">
-                                <MaterialCommunityIcons name="home" size={24} color="black" />
-                            </CustomTab>
-                            <CustomTab to="/operations">
-                                <MaterialCommunityIcons name="wallet-plus" size={24} color="black" />
-                            </CustomTab>
-                            <CustomTab to="/transfers">
-                                <MaterialCommunityIcons name="bank-transfer" size={24} color="black" />
-                            </CustomTab>
-                            <CustomTab to="/bankAccounts">
-                                <MaterialCommunityIcons name="wallet" size={24} color="black" />
-                            </CustomTab>
-                            <CustomTab to="/profile">
-                                <MaterialCommunityIcons name="account" size={24} color="black" />
-                            </CustomTab>
+                            {
+                                TABS.map((tab, index) =>
+                                    <CustomTab key={index} to={tab.path} iconName={tab.iconName} />
+                                )
+                            }
                         </TabNavigator>
 
                     </DashboardContainer>

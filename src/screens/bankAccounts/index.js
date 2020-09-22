@@ -42,22 +42,22 @@ export default function BankAccountsScreen({ history }) {
         <Container>
             <ModalSpinner visible={isLoading} />
             <StyledScroll showsVerticalScrollIndicator={false}>
+                <TopBanksBox>
+                    <Text value="Minhas Contas:" type="label" themeColor="grayDark" />
+                    <Text
+                        value='Nova conta'
+                        onPress={() => history.push('/newAccountBank')}
+                        themeColor="primary"
+                        alignSelf="center"
+                        bold
+                    />
+                </TopBanksBox>
+                <Line vertical={5} />
                 {bankAccounts.length === 0 &&
-                    <FeedbackMessage text="Você ainda não possui nenhum banco cadastrado." />
+                    <FeedbackMessage text="Você ainda não possui nenhuma conta bancária cadastrada." />
                 }
                 {bankAccounts.length > 0 &&
                     <>
-                        <TopBanksBox>
-                            <Text value="Contas:" type="label" themeColor="grayDark" />
-                            <Text
-                                value='Nova conta'
-                                onPress={() => history.push('/newAccountBank')}
-                                themeColor="primary"
-                                alignSelf="center"
-                                bold
-                            />
-                        </TopBanksBox>
-                        <Line vertical={5} />
                         <BanksList>
                             {renderBankAccounts()}
                         </BanksList>
