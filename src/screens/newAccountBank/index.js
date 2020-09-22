@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Container, Form, ButtonsBox, StyledScroll } from './styled';
-import { Text, Input, Button, FeedbackMessage, Line } from '../../components/commons';
-import { listBanks, createOperation } from '../../store/ducks/bankAccounts';
+import { Text, Input, Button, FeedbackMessage, Line, ModalSpinner } from '../../components/commons';
+import { createBank } from '../../store/ducks/bankAccounts';
 
 export default function NewAccountBankScreen({ history }) {
 
     const [bankAccount, setBankAccount] = useState({});
     const [validationErrorMsg, setValidationErrorMsg] = useState(null);
+    const { isLoading, errorMessage } = useSelector(state => state.bankAccountsReducer);
     const dispatch = useDispatch();
 
     const { name, overdraft } = bankAccount;
+
+    const inputCurrencyValueRef = useRef(null);
 
     function onChangeBankName(name) {
         setBankAccount({ ...bankAccount, name });
@@ -22,8 +25,8 @@ export default function NewAccountBankScreen({ history }) {
     }
 
     function onPressConfirm() {
-        console.log(bankAccount);
-        // dispatch(createOperation(operation));
+        const unmaskedValue = inputCurrencyValueRef.current.getRawValue();
+        dispatch(createBank({ ...bankAccount, overdraft: unmaskedValue }, history));
     }
 
     function cleanValidationErrorMsg() {
@@ -49,12 +52,13 @@ export default function NewAccountBankScreen({ history }) {
 
     return (
         <Container>
+            <ModalSpinner visible={isLoading} />
             <StyledScroll showsVerticalScrollIndicator={false}>
                 <Text value="Adicionar banco:" type="label" themeColor="grayDark" />
                 <Line vertical={5} />
                 {
-                    validationErrorMsg &&
-                    <FeedbackMessage text={validationErrorMsg} type="error" />
+                    (validationErrorMsg || errorMessage) &&
+                    <FeedbackMessage text={validationErrorMsg || errorMessage} type="error" />
                 }
                 <Form>
                     <Input
@@ -67,6 +71,7 @@ export default function NewAccountBankScreen({ history }) {
                         onChangeText={(text) => onChangeOverdraft(text)}
                         keyboardType="numeric"
                         value={overdraft}
+                        ref={inputCurrencyValueRef}
                         maskType='money'
                     />
                     <ButtonsBox>

@@ -1,11 +1,16 @@
-import styled from 'styled-components'
-import { StatusBar } from 'react-native';
+import styled from 'styled-components';
 
-// 
 export const Container = styled.View`
   flex: 1;
-  background-color: ${({ theme }) => theme.color.white};
-  margin-top: ${StatusBar.currentHeight}px;
   justify-content: center;
-  align-items: center;
-`
+  background-color: ${({ theme }) => theme.color.white};
+  padding: 10px;
+`;
+
+export const StyledScroll = styled.ScrollView.attrs(() => ({
+  contentContainerStyle: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+}))``;

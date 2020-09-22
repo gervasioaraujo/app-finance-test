@@ -8,16 +8,9 @@ export const Container = styled.View`
   padding: 10px;
 `;
 
-export const BanksList = styled.View`
-  background-color: ${({ theme }) => theme.color.white};
-`
-
-export const BalanceTotalBox = styled.View`
-  background-color: ${({ theme }) => theme.color.grayLighter};
-  margin-top: 5px;
-  padding: 10px;
-  border-radius: 2px;
-  flex-direction: row;
+export const ProfileBox = styled.View`
+  margin-bottom: 10px;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
+  padding: 5px;
 `

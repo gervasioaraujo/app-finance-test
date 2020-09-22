@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -17,6 +17,8 @@ export default function TransfersScreen() {
     const dispatch = useDispatch();
 
     const { sourceBank, destinationBank, value, date } = transfer;
+
+    const inputCurrencyValueRef = useRef(null);
 
     useEffect(() => {
         init();
@@ -48,8 +50,8 @@ export default function TransfersScreen() {
     }
 
     function onPressConfirm() {
-        // console.log(transfer);
-        dispatch(createTransfer(transfer));
+        const unmaskedValue = inputCurrencyValueRef.current.getRawValue();
+        dispatch(createTransfer({ ...transfer, value: unmaskedValue }));
     }
 
     function cleanValidationErrorMsg() {
@@ -112,6 +114,7 @@ export default function TransfersScreen() {
                         onChangeText={(text) => onChangeValue(text)}
                         keyboardType="numeric"
                         value={value}
+                        ref={inputCurrencyValueRef}
                         maskType='money'
                     />
                     <DatePickerButton onPress={openDatePicker}>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Container } from './styled';
+import { Container, StyledScroll } from './styled';
 import { Text } from '../../components/commons';
 import { RegisterForm } from '../../components';
 import { register } from '../../store/ducks/auth';
@@ -33,25 +33,27 @@ export default function RegistrationScreen({ history }) {
 
     return (
         <Container>
-            <RegisterForm
-                user={user}
-                onUsernameChange={onUsernameChange}
-                onEmailChange={onEmailChange}
-                onPasswordChange={onPasswordChange}
-                onPressConfirm={onPressRegister}
-                actionText="Cadastrar"
-                isLoading={isLoading}
-                errorMessage={errorMessage}
-            />
-            <Text
-                value="Já possui uma conta?"
-            />
-            <Text
-                value="Faça o login!"
-                onPress={() => history.push("/")}
-                textDecorationLine='underline'
-                themeColor="primary"
-            />
+            <StyledScroll showsVerticalScrollIndicator={false}>
+                <RegisterForm
+                    user={user}
+                    onUsernameChange={onUsernameChange}
+                    onEmailChange={onEmailChange}
+                    onPasswordChange={onPasswordChange}
+                    onPressConfirm={onPressRegister}
+                    actionText="Cadastrar"
+                    isLoading={isLoading}
+                    errorMessage={errorMessage}
+                />
+                <Text
+                    value="Já possui uma conta?"
+                />
+                <Text
+                    value="Faça o login!"
+                    onPress={() => history.push("/")}
+                    textDecorationLine='underline'
+                    themeColor="primary"
+                />
+            </StyledScroll>
         </Container>
     );
 

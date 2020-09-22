@@ -157,7 +157,7 @@ export function logout() {
 }
 
 export function localLogin(history) {
-    return (dispatch) => {
+    return async (dispatch) => {
         dispatch({ type: Types.LOCAL_LOGIN_SUCCED });
         dispatch(history.push('/'));
     };

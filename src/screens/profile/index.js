@@ -1,12 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useSelector, useDispatch } from 'react-redux';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-import { Container, BanksList, BalanceTotalBox } from './styled';
-import { Text, Line, Button } from '../../components/commons';
-import { BankAccountItem } from '../../components/';
-
+import { Container, ProfileBox } from './styled';
+import { Text } from '../../components/commons';
 import { logout } from '../../store/ducks/auth';
-import { numberToCurrencyReal } from '../../utils/currency';
+import theme from '../../../theme';
 
 export default function ProfileScreen({ history }) {
 
@@ -20,8 +19,16 @@ export default function ProfileScreen({ history }) {
 
     return (
         <Container>
-            <Text value={email} type="title" themeColor="grayDark" bold />
-            <Button text="Logout" onPress={onPressLogout} width={40} />
+            <ProfileBox>
+                <MaterialCommunityIcons name="account-circle" size={100} color={theme.color.grayDarker} />
+                <Text value={email} type="title" themeColor="grayDarker" bold />
+            </ProfileBox>
+            <Text
+                value='Logout'
+                onPress={onPressLogout}
+                themeColor="primary"
+                bold
+            />
         </Container>
     );
 

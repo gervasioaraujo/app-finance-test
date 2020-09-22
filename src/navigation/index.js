@@ -9,7 +9,6 @@ import {
 } from '../screens';
 import { MainContainer, DashboardContainer, TabNavigator } from './styled';
 import { CustomTab } from '../components';
-import theme from '../../theme';
 
 const TABS = [
     { path: '/', iconName: 'home', component: MainScreen },
@@ -23,14 +22,14 @@ export default function AppNavigation() {
 
     const { isUserLoggedIn } = useSelector(state => state.authReducer);
 
-    // if (!isUserLoggedIn) {
-    //     return (
-    //         <NativeRouter>
-    //             <Route exact path="/" component={LoginScreen} />
-    //             <Route path="/registration" component={RegistrationScreen} />
-    //         </NativeRouter>
-    //     );
-    // }
+    if (!isUserLoggedIn) {
+        return (
+            <NativeRouter>
+                <Route exact path="/" component={LoginScreen} />
+                <Route path="/registration" component={RegistrationScreen} />
+            </NativeRouter>
+        );
+    }
 
     return (
         <NativeRouter>

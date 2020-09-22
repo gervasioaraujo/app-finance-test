@@ -30,46 +30,48 @@ export default function MainScreen({ history }) {
 
     return (
         <Container>
-            <ModalSpinner visible={isLoading} />
-            <StyledScroll showsVerticalScrollIndicator={false}>
-                <BanksBox>
-                    <TopBanksBox>
-                        <Text value="Minhas Contas:" type="label" themeColor="grayDark" />
-                        <Text
-                            value='Nova conta'
-                            onPress={() => history.push('/newAccountBank')}
-                            themeColor="primary"
-                            alignSelf="center"
-                            bold
-                        />
-                    </TopBanksBox>
-                    <Line vertical={5} />
-                    {bankAccounts.length === 0 &&
-                        <FeedbackMessage text="Você ainda não possui nenhuma conta bancária cadastrada." />
-                    }
-                    {bankAccounts.length > 0 &&
-                        <BanksList
-                            horizontal
-                            showsHorizontalScrollIndicator={false}
-                        >
-                            {renderBanks()}
-                        </BanksList>
-                    }
-                </BanksBox>
+            {isLoading && <ModalSpinner visible={isLoading} />}
+            {!isLoading &&
+                <StyledScroll showsVerticalScrollIndicator={false}>
+                    <BanksBox>
+                        <TopBanksBox>
+                            <Text value="Minhas Contas:" type="label" themeColor="grayDark" />
+                            <Text
+                                value='Nova conta'
+                                onPress={() => history.push('/newAccountBank')}
+                                themeColor="primary"
+                                alignSelf="center"
+                                bold
+                            />
+                        </TopBanksBox>
+                        <Line vertical={5} />
+                        {bankAccounts.length === 0 &&
+                            <FeedbackMessage text="Você ainda não possui nenhuma conta bancária cadastrada." />
+                        }
+                        {bankAccounts.length > 0 &&
+                            <BanksList
+                                horizontal
+                                showsHorizontalScrollIndicator={false}
+                            >
+                                {renderBanks()}
+                            </BanksList>
+                        }
+                    </BanksBox>
 
-                <OperationsBox>
-                    {operations.length > 0 &&
-                        <>
-                            <Text value="Minhas Operações:" type="label" themeColor="grayDark" />
-                            <Line vertical={5} />
+                    <OperationsBox>
+                        {operations.length > 0 &&
+                            <>
+                                <Text value="Minhas Operações:" type="label" themeColor="grayDark" />
+                                <Line vertical={5} />
 
-                            <OperationsList>
-                                {renderOperations()}
-                            </OperationsList>
-                        </>
-                    }
-                </OperationsBox>
-            </StyledScroll>
+                                <OperationsList>
+                                    {renderOperations()}
+                                </OperationsList>
+                            </>
+                        }
+                    </OperationsBox>
+                </StyledScroll>
+            }
         </Container>
     );
 

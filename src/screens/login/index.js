@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import * as LocalAuthentication from 'expo-local-authentication';
 
-import { Container } from './styled';
+import { Container, StyledScroll } from './styled';
 import { Text } from '../../components/commons';
 import { LoginForm } from '../../components';
 import { login, localLogin } from '../../store/ducks/auth';
@@ -26,8 +26,8 @@ export default function LoginScreen({ history }) {
 
     async function _localLogin() {
         const { success } = await LocalAuthentication.authenticateAsync();
-        console.log(success);
-        dispatch(localLogin(history));
+        if (success)
+            dispatch(localLogin(history));
     }
 
     function onIdentifierChange(identifier) {
@@ -44,25 +44,27 @@ export default function LoginScreen({ history }) {
 
     return (
         <Container>
-            <LoginForm
-                user={user}
-                onEmailChange={onIdentifierChange}
-                onPasswordChange={onPasswordChange}
-                onPressConfirm={onPressLogin}
-                actionText="Login"
-                isLoading={isLoading}
-                errorMessage={errorMessage}
-                localLogin={(hasLocalPassword && userToken) ? _localLogin : null}
-            />
-            <Text
-                value="Não possui uma conta ainda?"
-            />
-            <Text
-                value="Cadastre-se!"
-                onPress={() => history.push("registration")}
-                textDecorationLine='underline'
-                themeColor="primary"
-            />
+            <StyledScroll showsVerticalScrollIndicator={false}>
+                <LoginForm
+                    user={user}
+                    onEmailChange={onIdentifierChange}
+                    onPasswordChange={onPasswordChange}
+                    onPressConfirm={onPressLogin}
+                    actionText="Login"
+                    isLoading={isLoading}
+                    errorMessage={errorMessage}
+                    localLogin={(hasLocalPassword && userToken) ? _localLogin : null}
+                />
+                <Text
+                    value="Não possui uma conta ainda?"
+                />
+                <Text
+                    value="Cadastre-se!"
+                    onPress={() => history.push("registration")}
+                    textDecorationLine='underline'
+                    themeColor="primary"
+                />
+            </StyledScroll>
         </Container>
     );
 

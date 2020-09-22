@@ -110,8 +110,8 @@ export default function bankAccountsReducer(state = initialState, action) {
                 // bankAccounts: state.bankAccounts.map(ba => {
                 //     if (ba.name === bank) {
                 //         if (type === 'incoming') {
-                //             ba.balance = Number(ba.balance) + Number(value);
-                //         } else ba.balance = Number(ba.balance) - Number(value);
+                //             ba.overdraft = Number(ba.overdraft) + Number(value);
+                //         } else ba.overdraft = Number(ba.overdraft) - Number(value);
                 //     }
                 //     return ba;
                 // }),
@@ -166,7 +166,7 @@ export function listBanks() {
 
 }
 
-export function createBank(bankAccount) {
+export function createBank(bankAccount, history) {
 
     return async (dispatch, getState) => {
 
@@ -175,18 +175,18 @@ export function createBank(bankAccount) {
         const { userToken } = getState().authReducer;
 
         try {
-            const res = await api.post('/bank-accounts',
+            const res = await api.post('/bank-accounts', bankAccount,
                 {
                     headers: {
                         'Authorization': `Bearer ${userToken}`
                     }
                 });
-            // console.log(res.data);
-            // const bankAccounts = res.data;
+            // console.log(res);
             dispatch({
                 type: Types.CREATE_BANK_ACCOUNT_SUCCED,
-                // payload: { bankAccounts }
             });
+            Alert.alert('', 'Conta criada com sucesso!');
+            history.push('/');
         } catch (e) {
             const errorMessage = e ?.response ? e.response.data.message : 'Error';
             dispatch({
@@ -238,6 +238,8 @@ export function createOperation(operation, showFeedBack = true) {
 
         dispatch({ type: Types.CREATE_OPERATION_STARTED });
 
+        console.log(operation);
+
         const { userToken } = getState().authReducer;
 
         try {
@@ -270,8 +272,6 @@ export function createTransfer(transfer) {
     return async (dispatch) => {
 
         dispatch({ type: Types.CREATE_TRANSFER_STARTED });
-
-        console.log(transfer);
 
         try {
             const { sourceBank, destinationBank, value, date } = transfer;
