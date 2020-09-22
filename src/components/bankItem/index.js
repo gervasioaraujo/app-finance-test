@@ -10,11 +10,11 @@ export default function BankItem({ data: { name, overdraft } }) {
     return (
         <Container>
             <Text value={name} bold />
-            <Text
+            {/* <Text
                 value={numberToCurrencyReal(overdraft)}
                 type="label"
                 themeColor={overdraft < 0 ? 'textError' : 'primary'}
-            />
+            /> */}
         </Container>
     );
 

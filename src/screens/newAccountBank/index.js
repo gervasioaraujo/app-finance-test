@@ -42,7 +42,7 @@ export default function NewAccountBankScreen({ history }) {
             return;
         }
         if (!overdraft || !overdraft.trim()) {
-            setValidationErrorMsg('O campo Saldo é obrigatório!');
+            setValidationErrorMsg('O campo Overdraft é obrigatório!');
             return;
         }
 
@@ -67,7 +67,7 @@ export default function NewAccountBankScreen({ history }) {
                         value={name}
                     />
                     <Input
-                        placeholder='Saldo'
+                        placeholder='Overdraft'
                         onChangeText={(text) => onChangeOverdraft(text)}
                         keyboardType="numeric"
                         value={overdraft}

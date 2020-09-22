@@ -27,8 +27,16 @@ export default function BankAccountsScreen({ history }) {
 
     function renderBalanceTotal() {
         const balanceTotal = bankAccounts.reduce((total, bank) => {
-            const { overdraft } = bank;
-            return total + overdraft;
+            // const { overdraft } = bank;
+            // return total + overdraft;
+            const { operations } = bank;
+            const bankBalance = operations.reduce((total, operation) => {
+                const { type, value } = operation;
+                if (type === 'incoming')
+                    return total + value;
+                else return total - value;
+            }, 0);
+            return total + bankBalance;
         }, 0);
         return <Text
             value={numberToCurrencyReal(balanceTotal)}
@@ -62,7 +70,7 @@ export default function BankAccountsScreen({ history }) {
                             {renderBankAccounts()}
                         </BanksList>
                         <BalanceTotalBox>
-                            <Text value="Saldo disponível: " type="label" themeColor="grayDark" />
+                            <Text value="Saldo: " type="label" themeColor="grayDark" />
                             {renderBalanceTotal()}
                         </BalanceTotalBox>
                     </>

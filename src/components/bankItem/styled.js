@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.View`
   background-color: ${({ theme }) => theme.color.white};
   margin: 5px;
-  padding: 8px;
+  padding: 10px;
   border-radius: 5px;
   align-items: center;
   justify-content: center;
